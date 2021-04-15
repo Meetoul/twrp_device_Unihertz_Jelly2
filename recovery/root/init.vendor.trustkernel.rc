@@ -1,0 +1,28 @@
+on init
+    mkdir /mnt/vendor 0755 root root
+    mkdir /mnt/vendor/apd 0771 root root
+    mkdir /mnt/vendor/protect_f 0770 root root
+    mkdir /mnt/vendor/protect_s 0770 root root
+    mkdir /mnt/vendor/persist 0755 root root
+    mkdir /mnt/vendor/nvdata 0771 root root
+    mkdir /mnt/vendor/nvcfg 0771 root root
+    mount ext4 /dev/block/platform/bootdevice/by-name/apd /mnt/vendor/apd rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/protect1 /mnt/vendor/protect_f rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/protect2 /mnt/vendor/protect_s rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/nvdata /mnt/vendor/nvdata rw wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/nvcfg /mnt/vendor/nvcfg rw wait
+
+on post-fs-data
+    mkdir /mnt/vendor/nvdata/media 0771 root root
+
+    #Create cct mount point
+    mkdir /mnt/vendor/cct 0771 root root
+
+    # VIA flashlessd service
+    mkdir /mnt/vendor/nvdata/md_via 0770 root root
+ 
+    # Modem related device nodes
+    mkdir /mnt/vendor/nvdata/md  0770 root root
+    mkdir /mnt/vendor/nvdata/md2 0770 root root
+    mkdir /mnt/vendor/nvdata/md3 0770 root root

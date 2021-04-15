@@ -1,0 +1,57 @@
+From 78b2752cf6b089003112b78ecee2f685ed717f8f Mon Sep 17 00:00:00 2001
+From: Matthias Leitl <a.dead.trousers@gmail.com>
+Date: Fri, 15 Jan 2021 19:47:35 +0100
+Subject: [PATCH] Deactivate vibration and set location to central europe
+
+Change-Id: If337186805b21b2ad9cd2c8f0826e25254430c7f
+---
+ data.cpp | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/data.cpp b/data.cpp
+index 571def68..cdf8d549 100755
+--- a/data.cpp
++++ b/data.cpp
+@@ -580,9 +580,9 @@ void DataManager::SetDefaultValues()
+ 	mConst.SetValue(TW_VERSION_VAR, TW_VERSION_STR);
+ 
+ #ifndef TW_NO_HAPTICS
+-	mPersist.SetValue("tw_button_vibrate", "80");
+-	mPersist.SetValue("tw_keyboard_vibrate", "40");
+-	mPersist.SetValue("tw_action_vibrate", "160");
++	mPersist.SetValue("tw_button_vibrate", "0");
++	mPersist.SetValue("tw_keyboard_vibrate", "0");
++	mPersist.SetValue("tw_action_vibrate", "0");
+ 	mConst.SetValue("tw_disable_haptics", "0");
+ #else
+ 	LOGINFO("TW_NO_HAPTICS := true\n");
+@@ -749,7 +749,7 @@ void DataManager::SetDefaultValues()
+ 	mPersist.SetValue(TW_DISABLE_FREE_SPACE_VAR, "0");
+ 	mPersist.SetValue(TW_FORCE_DIGEST_CHECK_VAR, "0");
+ 	mPersist.SetValue(TW_USE_COMPRESSION_VAR, "0");
+-	mPersist.SetValue(TW_TIME_ZONE_VAR, "CST6CDT,M3.2.0,M11.1.0");
++	mPersist.SetValue(TW_TIME_ZONE_VAR, "CET-1CEST,M3.5.0,M10.5.0");
+ 	mPersist.SetValue(TW_GUI_SORT_ORDER, "1");
+ 	mPersist.SetValue(TW_RM_RF_VAR, "0");
+ 	mPersist.SetValue(TW_SKIP_DIGEST_CHECK_VAR, "0");
+@@ -757,7 +757,7 @@ void DataManager::SetDefaultValues()
+ 	mPersist.SetValue(TW_SDEXT_SIZE, "0");
+ 	mPersist.SetValue(TW_SWAP_SIZE, "0");
+ 	mPersist.SetValue(TW_SDPART_FILE_SYSTEM, "ext3");
+-	mPersist.SetValue(TW_TIME_ZONE_GUISEL, "CST6;CDT,M3.2.0,M11.1.0");
++	mPersist.SetValue(TW_TIME_ZONE_GUISEL, "CET-1;CEST,M3.5.0,M10.5.0");
+ 	mPersist.SetValue(TW_TIME_ZONE_GUIOFFSET, "0");
+ 	mPersist.SetValue(TW_TIME_ZONE_GUIDST, "1");
+ 	mData.SetValue(TW_ACTION_BUSY, "0");
+@@ -774,7 +774,7 @@ void DataManager::SetDefaultValues()
+ 	mData.SetValue("tw_terminal_state", "0");
+ 	mData.SetValue("tw_background_thread_running", "0");
+ 	mData.SetValue(TW_RESTORE_FILE_DATE, "0");
+-	mPersist.SetValue("tw_military_time", "0");
++	mPersist.SetValue("tw_military_time", "1");
+ 	mData.SetValue(TW_IS_SUPER, "0");
+ 
+ #ifdef TW_INCLUDE_CRYPTO
+-- 
+2.25.1
+

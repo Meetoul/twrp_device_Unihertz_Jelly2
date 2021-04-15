@@ -1,0 +1,74 @@
+import /init.vendor.trustkernel.rc
+import /vendor/etc/init/trustkernel.rc
+import /vendor/etc/init/android.hardware.gatekeeper@1.0-service.rc
+import /vendor/etc/init/android.hardware.keymaster@4.0-service.trustkernel.rc
+import /vendor/etc/init/vendor.mediatek.hardware.keymaster_attestation@1.1-service.rc
+
+service hwservicemanager /system/bin/hwservicemanager
+    user root
+    group root readproc
+    disabled
+    onrestart setprop hwservicemanager.ready false
+    seclabel u:r:recovery:s0
+
+service servicemanager /system/bin/servicemanager
+    user root
+    group root readproc
+    disabled
+    seclabel u:r:recovery:s0
+
+service keystore /system/bin/keystore /tmp/misc/keystore
+    user root
+    group root drmrpc readproc
+    disabled
+    seclabel u:r:recovery:s0
+    
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+    
+on fs
+    install_keyring
+    setprop crypto.ready 1
+    start hwservicemanager
+    start servicemanager
+        
+on post-fs
+    # Support A/B feature for EMMC and UFS boot region
+    symlink /dev/block/sda /dev/block/mmcblk0boot0
+    symlink /dev/block/sdb /dev/block/mmcblk0boot1
+    symlink /dev/block/mmcblk0boot0 /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/platform/bootdevice/by-name/preloader_b
+
+    # Support A/B feature for combo emmc and ufs OTA update
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_emmc_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_emmc_b
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_ufs_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_ufs_b
+   
+on property:hwservicemanager.ready=true
+    start vendor.keymaster-4-0-trustkernel
+    start vendor.gatekeeper-1-0
+    #start keymaster_attestation-1-1
+    
+on property:ro.crypto.state=unsupported
+    stop teed
+    stop vendor.keymaster-4-0-trustkernel
+    stop vendor.gatekeeper-1-0
+    #stop keymaster_attestation-1-1
+
+on property:ro.crypto.state=unencrypted
+    stop teed
+    stop vendor.keymaster-4-0-trustkernel
+    stop vendor.gatekeeper-1-0
+    #stop keymaster_attestation-1-1
+
+on property:twrp.decrypt.done=true
+    stop teed
+    stop vendor.keymaster-4-0-trustkernel
+    stop vendor.gatekeeper-1-0
+    #stop keymaster_attestation-1-1
+        
