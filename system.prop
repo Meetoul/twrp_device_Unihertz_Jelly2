@@ -18,3 +18,6 @@ ro.vendor.mediatek.platform=MT6771
 ro.treble.enabled=true
 ro.boot.dynamic_partitions=true
 sys.usb.ffs.aio_compat=true
+#ro.logd.filter=disable
+#persist.ro.logd.filter=disable
+#ro.logd.size.stats=2M

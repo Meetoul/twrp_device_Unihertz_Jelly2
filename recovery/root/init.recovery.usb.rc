@@ -1,68 +1,229 @@
-on boot
-    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+# Parts taken from init.rc, init.usb.rc, init.usb.configfs.rc and init.mt6771.usb.rc
+
+on early-init
+    write /sys/module/musb_hdrc/parameters/kernel_init_done 1
+
+on init
+    mount configfs none /config
+
+on post-fs
+    setprop vendor.usb.vid "0x0E8D"
     mkdir /dev/usb-ffs 0770 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
-    mount configfs none /config
     mkdir /config/usb_gadget/g1 0770 shell shell
-    mkdir /config/usb_gadget/g1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/idVendor ${vendor.usb.vid}
+    write /config/usb_gadget/g1/bcdDevice 0x0223
     write /config/usb_gadget/g1/bcdUSB 0x0200
-    write /config/usb_gadget/g1/os_desc/use 1
+    mkdir /config/usb_gadget/g1/strings/0x409 0770
     write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
     write /config/usb_gadget/g1/strings/0x409/manufacturer ${ro.product.manufacturer}
     write /config/usb_gadget/g1/strings/0x409/product ${ro.product.model}
-    mkdir /config/usb_gadget/g1/functions/mass_storage.usb0
-    mkdir /config/usb_gadget/g1/functions/mtp.gs0
-    mkdir /config/usb_gadget/g1/functions/ptp.gs1
     mkdir /config/usb_gadget/g1/functions/accessory.gs2
     mkdir /config/usb_gadget/g1/functions/audio_source.gs3
-    mkdir /config/usb_gadget/g1/functions/midi.gs5
     mkdir /config/usb_gadget/g1/functions/ffs.adb
+    mkdir /config/usb_gadget/g1/functions/mtp.gs0
+    write /config/usb_gadget/g1/functions/mtp.gs0/os_desc/interface.MTP/compatible_id "MTP"
+    mkdir /config/usb_gadget/g1/functions/ptp.gs1
+    mkdir /config/usb_gadget/g1/functions/rndis.gs4
+    mkdir /config/usb_gadget/g1/functions/midi.gs5
+    mkdir /config/usb_gadget/g1/functions/acm.gs0
+    mkdir /config/usb_gadget/g1/functions/acm.gs1
+    mkdir /config/usb_gadget/g1/functions/acm.gs2
+    mkdir /config/usb_gadget/g1/functions/acm.gs3
+    mkdir /config/usb_gadget/g1/functions/mass_storage.usb0
+    mkdir /config/usb_gadget/g1/functions/hid.gs0
+    mkdir /config/usb_gadget/g1/functions/via_modem.gs0
+    mkdir /config/usb_gadget/g1/functions/via_ets.gs0
+    mkdir /config/usb_gadget/g1/functions/via_atc.gs0
     mkdir /config/usb_gadget/g1/configs/b.1 0770 shell shell
     mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
     write /config/usb_gadget/g1/os_desc/b_vendor_code 0x1
     write /config/usb_gadget/g1/os_desc/qw_sign "MSFT100"
+    write /config/usb_gadget/g1/configs/b.1/MaxPower 500
     symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
-    write /sys/class/android_usb/android0/f_ffs/aliases adb
 
-on property:sys.usb.config=none
+on post-fs-data
+    chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
+    chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
+#    mkdir /data/misc/adb 02750 system shell
+#    mkdir /data/adb 0700 root root
+
+on boot
+    setprop sys.usb.configfs 0
+    
+    setprop sys.usb.configfs 1
+    setprop sys.usb.ffs.aio_compat 1
+    setprop vendor.usb.controller "musb-hdrc"
+    setprop vendor.usb.acm_cnt 0
+    setprop vendor.usb.acm_port0 ""
+    setprop vendor.usb.acm_port1 ""
+    setprop vendor.usb.acm_enable 0
+    write /sys/class/android_usb/android0/f_mtp/cpu_mask 0xF0
+    write /sys/module/usb_f_mtp/parameters/mtp_rx_cont 1
+    chmod 0664 /sys/class/android_usb/android0/iSerial
+    chown root system /sys/class/android_usb/android0/iSerial
+
+    chown radio system /sys/class/usb_rawbulk/data/enable
+    chmod 0660 /sys/class/usb_rawbulk/data/enable
+    chown radio system /sys/class/usb_rawbulk/ets/enable
+    chmod 0660 /sys/class/usb_rawbulk/ets/enable
+    chown radio system /sys/class/usb_rawbulk/atc/enable
+    chmod 0660 /sys/class/usb_rawbulk/atc/enable
+    chown radio system /sys/class/usb_rawbulk/pcv/enable
+    chmod 0660 /sys/class/usb_rawbulk/pcv/enable
+    chown radio system /sys/class/usb_rawbulk/gps/enable
+    chmod 0660 /sys/class/usb_rawbulk/gps/enable
+    chown system radio /dev/ttyGS0
+    chmod 0660 /dev/ttyGS0
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
+    chown system radio /dev/ttyGS2
+    chmod 0660 /dev/ttyGS2
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+   
+    # for UAC MAX dpidle time
+    write /sys/module/xhci_hcd/parameters/dpidle_fs_max 0
+    write /sys/module/xhci_hcd/parameters/dpidle_hs_max 0
+
+    # for usb otg sdcard hot plug detection
+    write /sys/module/block/parameters/events_dfl_poll_msecs 1000
+
+on boot && property:persist.sys.usb.config=*
+    setprop sys.usb.config ${persist.sys.usb.config}
+
+on charger
+    mkdir /config/usb_gadget/g1 0770 shell shell
+    write /config/usb_gadget/g1/idVendor ${vendor.usb.vid}
+    write /config/usb_gadget/g1/bcdDevice 0x0223
+    write /config/usb_gadget/g1/bcdUSB 0x0200
+    mkdir /config/usb_gadget/g1/strings/0x409 0770
+    write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
+    write /config/usb_gadget/g1/strings/0x409/manufacturer ${ro.product.manufacturer}
+    write /config/usb_gadget/g1/strings/0x409/product ${ro.product.model}
+    mkdir /config/usb_gadget/g1/functions/hid.gs0
+    mkdir /config/usb_gadget/g1/configs/b.1 0770 shell shell
+    mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/configs/b.1/MaxPower 500
+    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
+    setprop sys.usb.configfs 1
+    setprop vendor.usb.controller "musb-hdrc"
+    setprop vendor.usb.acm_cnt 0
+    setprop vendor.usb.acm_port0 ""
+    setprop vendor.usb.acm_port1 ""
+    setprop vendor.usb.acm_enable 0
+    setprop sys.usb.config hid
+
+on property:init.svc.adbd=stopped
+    setprop sys.usb.ffs.ready 0
+
+### main function : none ###
+on property:sys.usb.config=none && property:sys.usb.configfs=0
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=none && property:sys.usb.configfs=1
     write /config/usb_gadget/g1/UDC "none"
     stop adbd
     setprop sys.usb.ffs.ready 0
     write /config/usb_gadget/g1/bDeviceClass 0
     write /config/usb_gadget/g1/bDeviceSubClass 0
     write /config/usb_gadget/g1/bDeviceProtocol 0
-    setprop sys.usb.state ${sys.usb.config}
-
-on property:sys.usb.config=mtp,adb
-    start adbd
-
-on property:sys.usb.ffs.ready=1 && property:sys.usb.config=mtp,adb
-    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp_adb"
     rm /config/usb_gadget/g1/configs/b.1/f1
     rm /config/usb_gadget/g1/configs/b.1/f2
     rm /config/usb_gadget/g1/configs/b.1/f3
+    rmdir /config/usb_gadget/g1/functions/rndis.gs4
+    setprop sys.usb.state ${sys.usb.config}
+
+    stop adbd
+    write /config/usb_gadget/g1/idVendor ${vendor.usb.vid}
     rm /config/usb_gadget/g1/configs/b.1/f4
     rm /config/usb_gadget/g1/configs/b.1/f5
-    write /config/usb_gadget/g1/idVendor 0x0e8d
-    write /config/usb_gadget/g1/idProduct 0x201d
+    write /sys/class/udc/musb-hdrc/device/saving 0
+
+### main function : hid ###
+on property:sys.usb.config=hid && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "HID"
+    write /config/usb_gadget/g1/idProduct 0x20FF
+    write /config/usb_gadget/g1/functions/hid.gs0/protocol 0
+    write /config/usb_gadget/g1/functions/hid.gs0/subclass 0
+#    write /config/usb_gadget/g1/functions/hid.gs0/report_length 4
+#    write /config/usb_gadget/g1/functions/hid.gs0/report_desc \\x05\\x01\\x09\\x00\\xa1\\x01\\xc0
+    symlink /config/usb_gadget/g1/functions/hid.gs0 /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+### main function : adb ###
+on property:sys.usb.config=adb && property:sys.usb.configfs=0
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18d1
+    write /sys/class/android_usb/android0/idProduct 4EE7
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=adb && property:sys.usb.configfs=1
+    start adbd
+
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=adb && property:vendor.usb.acm_cnt=0 && property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x201C
+    
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb && property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+### main function : mtp ###
+on property:sys.usb.config=mtp && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp"
+    symlink /config/usb_gadget/g1/functions/mtp.gs0 /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp && property:vendor.usb.acm_cnt=0 && property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x2008
+
+on property:sys.usb.config=mtp && property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp"
+    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
+    write /config/usb_gadget/g1/os_desc/use 1
+    symlink /config/usb_gadget/g1/functions/mtp.gs0 /config/usb_gadget/g1/configs/b.1/f1
+#    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+### main function : mtp,adb ###
+on property:sys.usb.config=mtp,adb && property:sys.usb.configfs=1
+    start adbd
+
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=mtp,adb && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp_adb"
     symlink /config/usb_gadget/g1/functions/mtp.gs0 /config/usb_gadget/g1/configs/b.1/f1
     symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
     write /config/usb_gadget/g1/UDC ${sys.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
 
-on property:sys.usb.config=adb
-    start adbd
+on property:sys.usb.config=mtp,adb && property:vendor.usb.acm_cnt=0 && property:sys.usb.configfs=1
+    setprop vendor.usb.pid 0x201D
 
-on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb
-    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
-    rm /config/usb_gadget/g1/configs/b.1/f1
-    rm /config/usb_gadget/g1/configs/b.1/f2
-    rm /config/usb_gadget/g1/configs/b.1/f3
-    rm /config/usb_gadget/g1/configs/b.1/f4
-    rm /config/usb_gadget/g1/configs/b.1/f5
-    write /config/usb_gadget/g1/idVendor 0x0e8d
-    write /config/usb_gadget/g1/idProduct 0x4ee7
-    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
-    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=mtp,adb && property:vendor.usb.acm_enable=0 && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp_adb"
+    write /config/usb_gadget/g1/idProduct ${vendor.usb.pid}
+    write /config/usb_gadget/g1/os_desc/use 1
+    symlink /config/usb_gadget/g1/functions/mtp.gs0 /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
+#    write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
