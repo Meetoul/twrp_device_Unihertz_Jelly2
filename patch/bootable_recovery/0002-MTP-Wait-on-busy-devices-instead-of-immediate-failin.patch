@@ -1,0 +1,48 @@
+From c0cfa482fe3f68dc7b39bd0467fc8920a07eabc7 Mon Sep 17 00:00:00 2001
+From: Matthias Leitl <a.dead.trousers@gmail.com>
+Date: Sat, 8 May 2021 12:06:18 +0200
+Subject: [PATCH 1/1] [MTP] Wait on busy devices instead of immediate failing
+ According to kernel log the mtp device is busy on the first attempt of TWRP
+ accessing it. So instead of immediate failure at least wait a bit (~50ms) for
+ it to be not so busy anymore.
+
+Change-Id: Iaccd6648113637f6f138fd07617acf247aeb2040
+---
+ mtp/ffs/MtpDevHandle.cpp | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/mtp/ffs/MtpDevHandle.cpp b/mtp/ffs/MtpDevHandle.cpp
+index e22ba55b..19c0be0c 100644
+--- a/mtp/ffs/MtpDevHandle.cpp
++++ b/mtp/ffs/MtpDevHandle.cpp
+@@ -28,6 +28,7 @@
+ #include <sys/types.h>
+ #include <sys/endian.h>
+ #include <unistd.h>
++#include <time.h>
+ 
+ #include "MtpDevHandle.h"
+ 
+@@ -60,9 +61,16 @@ int MtpDevHandle::sendEvent(mtp_event me) {
+ }
+ 
+ int MtpDevHandle::start(bool /* ptp */) {
+-	mFd.reset(TEMP_FAILURE_RETRY(open(mtp_dev_path, O_RDWR)));
+-	if (mFd == -1) return -1;
+-	return 0;
++	int attempt = 0;
++	do {
++		attempt++;
++		mFd.reset(TEMP_FAILURE_RETRY(open(mtp_dev_path, O_RDWR)));
++		if (mFd != -1) return 0; // Everthing is fine, we can leave now
++		mFd.reset(); // Close handle to make sure it's not opened multiple times
++		nanosleep((const struct timespec[]){{0, 10000000L}}, NULL); // Maybe the driver is just busy, let's wait a bit (10 milliseconds)
++	}
++	while(attempt < 5); // Give up after 5 attempts (= 50 milliseconds)
++	return -1;
+ }
+ 
+ void MtpDevHandle::close() {
+-- 
+2.25.1
+

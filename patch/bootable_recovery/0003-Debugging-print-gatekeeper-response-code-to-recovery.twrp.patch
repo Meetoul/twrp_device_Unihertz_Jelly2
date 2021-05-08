@@ -1,0 +1,25 @@
+From 2b737cede02c0279f5a2a0971590e7ce26b0a1c5 Mon Sep 17 00:00:00 2001
+From: Matthias Leitl <a.dead.trousers@gmail.com>
+Date: Fri, 23 Apr 2021 20:51:57 +0200
+Subject: [PATCH 1/1] Debugging print gatekeeper response code to recovery log
+
+Change-Id: I3d7d7bcc4759a8ad01fec4512cdb3193c110f0f5
+---
+ crypto/fscrypt/Decrypt.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/crypto/fscrypt/Decrypt.cpp b/crypto/fscrypt/Decrypt.cpp
+index 80ad4073..958185d5 100755
+--- a/crypto/fscrypt/Decrypt.cpp
++++ b/crypto/fscrypt/Decrypt.cpp
+@@ -966,6 +966,7 @@ bool Decrypt_User_Synth_Pass(const userid_t user_id, const std::string& Password
+ 							  gk_pwd_token_hidl,
+ 							  [&ret, &request_reenroll, &auth_token_len]
+ 								(const android::hardware::gatekeeper::V1_0::GatekeeperResponse &rsp) {
++									printf("gatekeeper response code: %d\n",rsp.code);
+ 									ret = static_cast<int>(rsp.code); // propagate errors
+ 									if (rsp.code >= android::hardware::gatekeeper::V1_0::GatekeeperStatusCode::STATUS_OK) {
+ 										auth_token_len = rsp.data.size();
+-- 
+2.25.1
+
