@@ -156,6 +156,40 @@ cd ~/android/twrp
 repo sync --force-sync
 ```
 
+## Extracting the vendor blobs
+
+### Use imjtool (formerly known as imgtool) to extract from stock rom files
+
+First follow [the instructions to extract and mount the stock rom files](HOW-TO-EXTRACT_FILES.md) 
+
+Then extract all the files we need
+
+```bash
+# For the Atom L EEA use
+~/android/twrp/device/Unihertz/Atom_L_EEA/extract-files.sh ~/unihertz/extracted
+# For the Atom XL EEA use
+~/android/twrp/device/Unihertz/Atom_XL_EEA/extract-files.sh ~/unihertz/extracted
+# For the Atom L TEE use
+~/android/twrp/device/Unihertz/Atom_L_TEE/extract-files.sh ~/unihertz/extracted
+# For the Atom XL TEE use
+~/android/twrp/device/Unihertz/Atom_XL_TEE/extract-files.sh ~/unihertz/extracted
+```
+
+### Use an allready rooted device
+
+If you were able to root your device this is just a small step. Plug in your device and do the follwing
+
+```bash
+# For the Atom L EEA use
+~/android/twrp/device/Unihertz/Atom_L_EEA/extract-files.sh 
+# For the Atom XL EEA use
+~/android/twrp/device/Unihertz/Atom_XL_EEA/extract-files.sh
+# For the Atom L TEE use
+~/android/twrp/device/Unihertz/Atom_L_TEE/extract-files.sh 
+# For the Atom XL TEE use
+~/android/twrp/device/Unihertz/Atom_XL_TEE/extract-files.sh
+```
+	
 ## Building the rom
 
 Prepare the build	
