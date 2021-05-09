@@ -52,23 +52,23 @@ on post-fs
 on property:hwservicemanager.ready=true
     start vendor.keymaster-4-0-trustkernel
     start vendor.gatekeeper-1-0
-    start keymaster_attestation-1-1
+    #start keymaster_attestation-1-1
     
 on property:ro.crypto.state=unsupported
     stop teed
     stop vendor.keymaster-4-0-trustkernel
     stop vendor.gatekeeper-1-0
-    stop keymaster_attestation-1-1
+    #stop keymaster_attestation-1-1
 
 on property:ro.crypto.state=unencrypted
     stop teed
     stop vendor.keymaster-4-0-trustkernel
     stop vendor.gatekeeper-1-0
-    stop keymaster_attestation-1-1
+    #stop keymaster_attestation-1-1
 
 on property:twrp.decrypt.done=true
     stop teed
     stop vendor.keymaster-4-0-trustkernel
     stop vendor.gatekeeper-1-0
-    stop keymaster_attestation-1-1
+    #stop keymaster_attestation-1-1
         
