@@ -12,17 +12,12 @@ on init
     mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist rw wait
     mount ext4 /dev/block/platform/bootdevice/by-name/nvdata /mnt/vendor/nvdata rw wait
     mount ext4 /dev/block/platform/bootdevice/by-name/nvcfg /mnt/vendor/nvcfg rw wait
-
-on post-fs-data
-    mkdir /mnt/vendor/nvdata/media 0771 root root
-
-    #Create cct mount point
-    mkdir /mnt/vendor/cct 0771 root root
-
-    # VIA flashlessd service
-    mkdir /mnt/vendor/nvdata/md_via 0770 root root
- 
-    # Modem related device nodes
-    mkdir /mnt/vendor/nvdata/md  0770 root root
-    mkdir /mnt/vendor/nvdata/md2 0770 root root
-    mkdir /mnt/vendor/nvdata/md3 0770 root root
+    
+service trustkernel.twrp /vendor/bin/trustkernel.twrp.sh
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0    
+    
+on early-fs
+    start trustkernel.twrp
