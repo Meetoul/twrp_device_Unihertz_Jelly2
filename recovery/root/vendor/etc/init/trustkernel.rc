@@ -7,9 +7,9 @@ on post-fs
 	mkdir /mnt/vendor/persist/t6_twrp
 	# chown system system /mnt/vendor/persist/t6
 	# restorecon /mnt/vendor/persist/t6
-	
+
 	setprop vendor.trustkernel.fs.mode 3
-	setprop vendor.trustkernel.fs.state ready	
+	setprop vendor.trustkernel.fs.state ready
 	start teed
 
 on property:vendor.trustkernel.fs.state=ready

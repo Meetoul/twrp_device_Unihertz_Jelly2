@@ -12,12 +12,12 @@ on init
     mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist rw wait
     mount ext4 /dev/block/platform/bootdevice/by-name/nvdata /mnt/vendor/nvdata rw wait
     mount ext4 /dev/block/platform/bootdevice/by-name/nvcfg /mnt/vendor/nvcfg rw wait
-    
+
 service trustkernel.twrp /vendor/bin/trustkernel.twrp.sh
     user root
     group root
     disabled
-    seclabel u:r:recovery:s0    
-    
+    seclabel u:r:recovery:s0
+
 on early-fs
     start trustkernel.twrp

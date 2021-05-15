@@ -8,9 +8,9 @@ on early-fs
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
     setprop sys.usb.config mtp,adb
-    setprop vendor.usb.vid "0x0E8D"    
+    setprop vendor.usb.vid "0x0E8D"
     setprop vendor.usb.controller "musb-hdrc"
-    
+
 on fs && property:sys.usb.configfs=1
     mount configfs none /config
     write /config/usb_gadget/g1/idVendor ${vendor.usb.vid}
@@ -55,7 +55,7 @@ on fs && property:sys.usb.configfs=1
     chmod 0660 /dev/ttyGS2
     chown system radio /dev/ttyGS3
     chmod 0660 /dev/ttyGS3
-   
+
     # for UAC MAX dpidle time
     write /sys/module/xhci_hcd/parameters/dpidle_fs_max 0
     write /sys/module/xhci_hcd/parameters/dpidle_hs_max 0
@@ -116,7 +116,7 @@ on property:sys.usb.ffs.ready=1 && property:sys.usb.config=mtp,adb && property:s
     write /config/usb_gadget/g1/UDC ${vendor.usb.controller}
     setprop sys.usb.ffs.mtp.ready 1
     setprop sys.usb.state ${sys.usb.config}
-    
+
 ### main function : mtp,fastboot ###
 on property:sys.usb.config=mtp,fastboot
     stop adbd
