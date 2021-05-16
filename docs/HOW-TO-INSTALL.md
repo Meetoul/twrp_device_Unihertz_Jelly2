@@ -1,4 +1,4 @@
-How to install TWRP for the Unihertz Atom L and XL
+How to install TWRP for the Unihertz Jelly2
 =================================================
 
 ## Getting adb and fastboot
@@ -43,13 +43,13 @@ source ~/.profile
 
 ### Windows
 
-Download [the latest version of adb and fastboot](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) to a directory of your choice and extract the archive. 
+Download [the latest version of adb and fastboot](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) to a directory of your choice and extract the archive.
 
 Note: I've had reports that under Windows adb/fastboot might not recognize the phone while in TWRP. For now I don't know whats causing this. So if that happends to you try using linux instead.
 
 ## Unlocking
 
-To be able to install anything on the Unihertz Atom L or XL we first need to unlock the bootloader.
+To be able to install anything on the Unihertz Jelly2 we first need to unlock the bootloader.
 
 1. Boot your device into the official OS.
 2. Go to `Settings > About phone`, tap the "build number" several times to enable developer settings.
@@ -63,10 +63,7 @@ To be able to install anything on the Unihertz Atom L or XL we first need to unl
 
 To get TWRP to boot proberly we also need to disable AVB. Otherwise the bootloader will check the ROM with the wrong authorization keys and prevent the loading.
 
-- [Atom L Region EEA (european union)](https://github.com/ADeadTrousers/android_device_Unihertz_Atom_L_EEA/releases)
-- [Atom XL Region EEA (european union)](https://github.com/ADeadTrousers/android_device_Unihertz_Atom_XL_EEA/releases)
-- [Atom L Region TEE (non-european union)](https://github.com/ADeadTrousers/android_device_Unihertz_Atom_L_TEE/releases)
-- [Atom XL Region TEE (non-european union)](https://github.com/ADeadTrousers/android_device_Unihertz_Atom_XL_TEE/releases)
+- [Jelly2 Region TEE (non-european union)](https://github.com/Meetoul/twrp_device_Unihertz_Jelly2_TEE/releases)
 
 1. Download `vbmeta.img` from the latest release page of your device.
 2. Connect your phone to your PC and open a terminal or a command line window.
@@ -77,14 +74,10 @@ To get TWRP to boot proberly we also need to disable AVB. Otherwise the bootload
 
 ## Installing TWRP recovery
 
-- [Atom L Region EEA (european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_L_EEA/releases)
-- [Atom XL Region EEA (european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_XL_EEA/releases)
-- [Atom L Region TEE (non-european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_L_TEE/releases)
-- [Atom XL Region TEE (non-european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_XL_TEE/releases)
+- [Jelly2 Region TEE (non-european union)](https://github.com/Meetoul/twrp_device_Unihertz_Jelly2_TEE/releases)
 
 1. Download `recovery.img` from the latest release page of your device.
 2. Connect your phone to your PC and open a terminal or a command line window.
 3. Run `adb reboot bootloader` on your PC to put your device in bootloader mode.
-4. Once your device has finished booting run `fastboot flash recovery recovery.img`.
-5. Run `fastboot reboot` and after the screen goes dark press volume up until you see the TWRP logo.
-6. Now you need to install a new ROM because booting into stock ROM will replace TWRP with the stock recovery.
+4. Once your device has finished booting run `fastboot erase recovery`. For some reason, image may be not actually flashed, even if fastboot reported success (at least over the stock recovery image), so in order make sure that the custom image is always flashed it's better to always erase the partition before flashing. After the erasing run `fastboot flash recovery recovery.img`.
+5. Run `fastboot reboot` and after the screen goes dark press volume up until you see the TWRP logo. Also you can type `fastboot reboot recovery` to boot to recovery mode immediately.

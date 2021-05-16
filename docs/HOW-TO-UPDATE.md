@@ -1,14 +1,11 @@
-How to update LineageOS 17.1 for the Unihertz Atom L and XL
+How to update LineageOS 17.1 for the Unihertz Jelly2
 =================================================
 
 Every piece of software should allways kept up-to-date. Therefore even this recovery get updates from time to time and you should allways apply these to your device.
 
 ## Updating TWRP recovery
 
-- [Atom L Region EEA (european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_L_EEA/releases)
-- [Atom XL Region EEA (european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_XL_EEA/releases)
-- [Atom L Region TEE (non-european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_L_TEE/releases)
-- [Atom XL Region TEE (non-european union)](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_XL_TEE/releases)
+- [Jelly2 Region TEE (non-european union)](https://github.com/Meetoul/twrp_device_Unihertz_Jelly2_TEE/releases)
 
 1. Download `recovery.img` from the latest release page of your device.
 2. Connect your phone to your PC and open a terminal or a command line window.

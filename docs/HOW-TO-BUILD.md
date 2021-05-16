@@ -1,4 +1,4 @@
-How to build TWRP for the Unihertz Atom L and XL
+How to build TWRP for the Unihertz Jelly2
 =================================================
 
 This guide is focused on building the recovery under a Linux host environment.
@@ -137,15 +137,8 @@ Add the following
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="ADeadTrousers/twrp_device_Unihertz_Atom_LXL" path="device/Unihertz/Atom_LXL" remote="github" revision="master" />
-  <!-- For the Atom L region eea add -->  
-  <project name="ADeadTrousers/twrp_device_Unihertz_Atom_L_EEA" path="device/Unihertz/Atom_L_EEA" remote="github" revision="master" />
-  <!-- For the Atom XL region eea add -->  
-  <project name="ADeadTrousers/twrp_device_Unihertz_Atom_XL_EEA" path="device/Unihertz/Atom_XL_EEA" remote="github" revision="master" />
-  <!-- For the Atom L region tee add -->  
-  <project name="ADeadTrousers/twrp_device_Unihertz_Atom_L_TEE" path="device/Unihertz/Atom_L_TEE" remote="github" revision="master" />
-  <!-- For the Atom XL region tee add -->  
-  <project name="ADeadTrousers/twrp_device_Unihertz_Atom_XL_TEE" path="device/Unihertz/Atom_XL_TEE" remote="github" revision="master" />
+  <project name="Meetoul/twrp_device_Unihertz_Jelly2" path="device/Unihertz/Jelly2" remote="github" revision="master" />
+  <project name="Meetoul/twrp_device_Unihertz_Jelly2_TEE" path="device/Unihertz/Jelly2_TEE" remote="github" revision="master" />
 </manifest>
 ```
 
@@ -160,34 +153,22 @@ repo sync --force-sync
 
 ### Use imjtool (formerly known as imgtool) to extract from stock rom files
 
-First follow [the instructions to extract and mount the stock rom files](HOW-TO-EXTRACT_FILES.md) 
+First follow [the instructions to extract and mount the stock rom files](HOW-TO-EXTRACT-FILES.md)
 
 Then extract all the files we need
 
 ```bash
-# For the Atom L EEA use
-~/android/twrp/device/Unihertz/Atom_L_EEA/extract-files.sh ~/unihertz/extracted
-# For the Atom XL EEA use
-~/android/twrp/device/Unihertz/Atom_XL_EEA/extract-files.sh ~/unihertz/extracted
-# For the Atom L TEE use
-~/android/twrp/device/Unihertz/Atom_L_TEE/extract-files.sh ~/unihertz/extracted
-# For the Atom XL TEE use
-~/android/twrp/device/Unihertz/Atom_XL_TEE/extract-files.sh ~/unihertz/extracted
+# For the Jelly2 TEE use
+~/android/twrp/device/Unihertz/Jelly2_TEE/extract-files.sh ~/unihertz/extracted
 ```
 
 ### Use an allready rooted device
 
-If you were able to root your device this is just a small step. Plug in your device and do the follwing
+If you were able to root your device this is just a small step. Plug in your device and do the following
 
 ```bash
-# For the Atom L EEA use
-~/android/twrp/device/Unihertz/Atom_L_EEA/extract-files.sh 
-# For the Atom XL EEA use
-~/android/twrp/device/Unihertz/Atom_XL_EEA/extract-files.sh
-# For the Atom L TEE use
-~/android/twrp/device/Unihertz/Atom_L_TEE/extract-files.sh 
-# For the Atom XL TEE use
-~/android/twrp/device/Unihertz/Atom_XL_TEE/extract-files.sh
+# For the Jelly2 TEE use
+~/android/twrp/device/Unihertz/Jelly2_TEE/extract-files.sh
 ```
 	
 ## Building the rom
@@ -197,14 +178,8 @@ Prepare the build
 ```bash
 cd ~/android/twrp
 source build/envsetup.sh
-# For the Atom L EEA use
-lunch omni_Atom_L_EEA
-# For the Atom XL EEA use
-lunch omni_Atom_XL_EEA
-# For the Atom L TEE use
-lunch omni_Atom_L_TEE
-# For the Atom XL TEE use
-lunch omni_Atom_XL_TEE
+# For the Jelly2 TEE use
+lunch omni_Jelly2_TEE
 ```
 	
 Do the actual build

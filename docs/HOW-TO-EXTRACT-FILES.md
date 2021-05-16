@@ -1,4 +1,4 @@
-How to extract informations from the Unihertz Atom L and XL
+How to extract informations from the Unihertz Jelly2
 =================================================
 
 ## Installing needed utilities
@@ -12,15 +12,8 @@ Make sure unpack_bootimg is build
 ```bash
 cd ~/android/twrp
 source build/envsetup.sh
-
-# For the Atom L EEA use
-breakfast Atom_L_EEA
-# For the atom XL EEA use
-breakfast Atom_XL_EEA
-# For the Atom L TEE use
-breakfast Atom_L_TEE
-# For the atom XL TEE use
-breakfast Atom_XL_TEE
+# For the Jelly2 TEE use
+lunch omni_Jelly2_TEE
 
 make unpack_bootimg
 ```
