@@ -1,4 +1,4 @@
-DEVICE_COMMON_PATH := device/Unihertz/Atom_LXL
+DEVICE_COMMON_PATH := device/Unihertz/Jelly2
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
