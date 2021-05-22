@@ -17,6 +17,7 @@ service trustkernel.twrp /vendor/bin/trustkernel.twrp.sh
     user root
     group root
     disabled
+    oneshot
     seclabel u:r:recovery:s0
 
 on early-fs
