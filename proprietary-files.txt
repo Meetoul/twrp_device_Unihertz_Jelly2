@@ -11,6 +11,7 @@ vendor/app/t6/data/E62563B4905C52822EADA8E32E5180D6/6B6579626F785F6372797074:rec
 vendor/bin/teed:recovery/root/vendor/bin/teed
 vendor/bin/kph:recovery/root/vendor/bin/kph
 vendor/bin/pld:recovery/root/vendor/bin/pld
+vendor/bin/tee_check_keybox:recovery/root/vendor/bin/tee_check_keybox
 vendor/bin/hw/android.hardware.gatekeeper@1.0-service:recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service
 vendor/bin/hw/android.hardware.keymaster@4.0-service.trustkernel:recovery/root/vendor/bin/hw/android.hardware.keymaster@4.0-service.trustkernel
 vendor/bin/hw/vendor.mediatek.hardware.keymaster_attestation@1.1-service:recovery/root/vendor/bin/hw/vendor.mediatek.hardware.keymaster_attestation@1.1-service

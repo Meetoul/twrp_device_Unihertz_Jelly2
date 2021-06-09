@@ -1,4 +1,4 @@
-on fs
+on post-fs
 	write /proc/bootprof "tkcore: prepare system ta path"
 	# chown system system /vendor/app/t6
 
@@ -48,6 +48,9 @@ on property:vendor.trustkernel.log.state=ready
 	# restorecon /data/vendor/t6/tkcore.log
 	setprop vendor.trustkernel.log.state enable
 
+on property:vendor.trustkernel.ready=true
+	start tee_check_keybox
+
 service teed /vendor/bin/teed \
     --datapath /data/vendor/t6/fs \
     --sptapath /data/vendor/t6/app \
@@ -57,5 +60,11 @@ service teed /vendor/bin/teed \
     --proprefix vendor.trustkernel
 	user root
 	group root
-    disabled
-    seclabel u:r:recovery:s0
+	disabled
+	seclabel u:r:recovery:s0
+    
+service tee_check_keybox /vendor/bin/tee_check_keybox
+	user root
+	group root
+	disabled
+	seclabel u:r:recovery:s0
