@@ -2,6 +2,8 @@ Common device configuration for the Unihertz Jelly2
 =================================================
 This common device tree is intended for a special usage in a TWRP or similar environment.
 
+If you are looking for a special device tree for the usage in a LineageOS or similar environment head over to https://github.com/Meetoul/android_device_Unihertz_Jelly2.
+
 The Unihertz Jelly2 (codenamed simply _"Jelly2"_) is a smallest modern Android smartphone from Unihertz, released in March 1, 2021.
 
 ![](docs/images/jelly2.png)
@@ -28,6 +30,7 @@ Additionally to this common device tree, you'll need one or all of the four regi
 ## Releases
 
 For the actual releases head on over to the device tree of the individual devices:
+
 - [Jelly2 Region TEE (non-european union)](https://github.com/Meetoul/twrp_device_Unihertz_Jelly2_TEE/releases)
 
 ## Documentations
@@ -40,4 +43,4 @@ For the actual releases head on over to the device tree of the individual device
 
 ## Special Thanks To
 
-- [ADeadTrousers](https://github.com/ADeadTrousers) I used his [AtomLXL device tree](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_LXL) as a base for this one. Phones are almost identical, so device trees are almost identical as well.
+- [ADeadTrousers](https://github.com/ADeadTrousers) I used his [AtomL/XL device tree](https://github.com/ADeadTrousers/twrp_device_Unihertz_Atom_LXL) as a base for this one. Phones hardware are almost identical, so device trees are almost identical as well.
